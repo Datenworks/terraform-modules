@@ -21,6 +21,8 @@ resource "google_compute_instance" "no_external" {
 
         //No external IP
     }
+
+    metadata_startup_script = "${var.create_data_volumes ? file("${path.module}/scripts/bootstrap.sh") : ""}"
 }
 
 resource "google_compute_instance" "external_ip" {
@@ -44,6 +46,8 @@ resource "google_compute_instance" "external_ip" {
             nat_ip = "${element(google_compute_address.default.*.address, count.index)}"
         }
     }
+
+    metadata_startup_script = "${var.create_data_volumes ? file("${path.module}/scripts/bootstrap.sh") : ""}"
 }
 
 resource "google_compute_disk" "data_disk" {
